@@ -1,22 +1,22 @@
+import { auth } from "@/lib/auth";
 import { Logo } from "./Logo";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { headers } from "next/headers";
+import { SignOut } from "./signOut";
 
-export function NavBar() {
+export async function NavBar() {
+  const session = await auth.api.getSession({ headers: await headers() });
   return (
     <div className="border-b border-secondary px-2 py-2 flex justify-between items-center">
       <Logo />
       <div className="flex gap-3">
-        <Button variant="secondary">
-          <Link href={"/signin"}>SignIn</Link>
-        </Button>
-
-        {/*<Link
-          href={"/signup"}
-          className="border border-gray-500 bg-gray-300 rounded-sm px-2 py-1"
-        >
-          SignUp
-        </Link>*/}
+        {!session && (
+          <Button variant="secondary">
+            <Link href={"/signin"}>SignIn</Link>
+          </Button>
+        )}
+        {session && <SignOut />}
       </div>
     </div>
   );
