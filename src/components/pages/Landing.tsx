@@ -6,7 +6,7 @@ import Link from "next/link";
 export function Landing() {
   return (
     <div className="h-screen flex flex-col">
-      <NavBar />
+      <NavBar hasSession={false} />
       <div className="flex-1 flex flex-col justify-center items-center gap-9">
         <div className="flex flex-col justify-center items-center">
           <h1 className="text-7xl font-bold">Welcome to Mindmaps</h1>
