@@ -2,6 +2,7 @@
 import { db } from "@/db";
 import { canvas } from "@/db/schemas/canvas";
 import { eq } from "drizzle-orm";
+import { use } from "react";
 
 const c = [
   {
@@ -44,6 +45,28 @@ export async function createCanvas(canvasName: string, userId: string) {
       .returning();
     console.log(data);
     return data[0];
+  } catch (e) {
+    return null;
+  }
+}
+
+export async function getCanvasById(canvasId: string) {
+  try {
+    const data = await db.select().from(canvas).where(eq(canvas.id, canvasId));
+    return data[0];
+  } catch (e) {
+    return null;
+  }
+}
+
+export async function changeCanvasName(canvasId: string, name: string) {
+  try {
+    const result = await db
+      .update(canvas)
+      .set({ name })
+      .where(eq(canvas.id, canvasId))
+      .returning();
+    return result[0];
   } catch (e) {
     return null;
   }
