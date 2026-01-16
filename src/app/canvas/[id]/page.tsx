@@ -1,6 +1,8 @@
+import { Canvas } from "@/components/pages/Canvas";
 import { auth } from "@/lib/auth";
+import { getCanvasById } from "@/services/canvas";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 type Props = {
   params: Promise<{
@@ -16,9 +18,15 @@ export default async function Page({ params }: Props) {
     redirect("/sigin");
   }
 
-  return (
-    <div>
-      <h1>{id}</h1>
-    </div>
-  );
+  const canvas = await getCanvasById(id);
+
+  if (!canvas) {
+    redirect("/");
+  }
+
+  if (canvas.createdBy !== session.user.id) {
+    redirect("/");
+  }
+
+  return <Canvas canvas={canvas} />;
 }
